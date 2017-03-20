@@ -4,6 +4,7 @@ import datetime
 import json
 import os
 import re
+import StringIO
 from urllib import urlencode
 from urllib2 import urlopen, HTTPError, URLError, Request
 
