@@ -132,7 +132,7 @@ def find_images(subreddit, min_score, days, target, coefficient):
 
 
 def download_image(url, download_dir):
-    if os.path.isdir(download_dir):
+    if not os.path.isdir(download_dir):
         os.makedirs(download_dir)
 
     dest_file = os.path.join(download_dir, os.urandom(10).encode('hex'))
