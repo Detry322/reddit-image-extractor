@@ -4,7 +4,7 @@ import datetime
 import json
 import os
 from urllib import urlencode
-from urllib2 import urlopen, HTTPError, URLError
+from urllib2 import urlopen, HTTPError, URLError, Request
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Download all images from a subreddit")
@@ -25,18 +25,19 @@ def request(url, *ar, **kwa):
     res = None
     for _try in xrange(_retries):
         try:
-            res = urlopen(url, *ar, **kwa)
-        except Exception as exc:
+            req = Request(url, headers={"User-Agent" : "reddit-image-extractor by /u/Detry322 - " + ' '.join(os.uname())})
+            res = urlopen(req, *ar, **kwa)
+        except URLError as exc:
             if _try == _retries - 1:
                 return None
             print("Try %r err %r  (%r)" % (
-                _try, exc, url))
+                _try, exc.reason, url))
         else:
             break
     return res
 
 def do_search(subreddit, start, end):
-    url = "https://reddit.com/{}/search.json?q=timestamp:{}..{}&sort=top&restrict_sr=on&syntax=cloudsearch".format(subreddit, get_secs(start), get_secs(end))
+    url = "https://www.reddit.com/r/{}/search.json?q=timestamp:{}..{}&sort=top&restrict_sr=on&syntax=cloudsearch".format(subreddit, get_secs(start), get_secs(end))
     try:
         r = request(url)
         if r is None:
@@ -86,7 +87,7 @@ def process_imgur_url(url):
         url = url.replace('.png', '.jpg')
     else:
         # Extract the file extension
-        ext = pathsplitext(pathbasename(url))[1]
+        ext = os.path.splitext(os.path.basename(url))[1]
         if ext == '.gifv':
             url = url.replace('.gifv', '.gif')
         if not ext:
