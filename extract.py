@@ -117,8 +117,9 @@ def resize_interval(old_interval, matched_posts, target, coefficient):
 def find_images(subreddit, min_score, days, target, coefficient):
     end = datetime.datetime.now()
     current = end - datetime.timedelta(days=days)
-    interval = 3.0
+    interval = 60.0
     while current < end:
+        print "INTERVAL SIZE: {}".format(interval)
         current_stop = current + datetime.timedelta(seconds=interval)
         matched_posts = 0
         for post in do_search(subreddit, current, current_stop):
