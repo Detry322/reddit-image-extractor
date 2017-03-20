@@ -3,6 +3,7 @@ import time
 import datetime
 import json
 import os
+import re
 from urllib import urlencode
 from urllib2 import urlopen, HTTPError, URLError, Request
 
@@ -175,6 +176,7 @@ def download_image(url, download_dir):
     filehandle = open(dest_file, 'wb')
     filehandle.write(filedata)
     filehandle.close()
+    print "Downloaded to {}".format(dest_file)
 
 
 def main():
