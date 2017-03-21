@@ -98,13 +98,12 @@ def process_imgur_url(url):
     return [url]
 
 def extract_urls(url):
-    urls = []
     if 'imgur.com' in url:
-        urls = process_imgur_url(url)
+        return process_imgur_url(url)
+    elif 'i.reddituploads.com' in url:
+        return [re.sub(r'&amp;', '&', url)]
     else:
-        urls = [url]
-
-    return urls
+        return [url]
 
 def resize_interval(old_interval, matched_posts, target, coefficient):
     MAX_POSTS = 25
